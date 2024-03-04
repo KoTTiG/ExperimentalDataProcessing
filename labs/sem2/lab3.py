@@ -2,43 +2,48 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from classes.in_out import In_Out
+from classes.processing import Processing
 
 
 def subplots(data1, data2, data3, name, coef, size=(15, 5), font_size=15):
     new_in_out = In_Out()
     if_color = False
     plt.figure(figsize=size)
-    plt.suptitle('resize image ' + name + ' by ' + str(coef) + ' times', fontsize=font_size+10)
+    plt.suptitle('resize image ' + name + ' by ' + str(coef) + ' times', fontsize=font_size)
     plt.subplot(131)
-    new_in_out.show_jpg_sub(data1, if_color, 'original (' + str(data1.shape[1]) + 'x' + str(data1.shape[0]) + ')', font_size)
+    new_in_out.show_jpg_sub(data1, 'original (' + str(data1.shape[1]) + 'x' + str(data1.shape[0]) + ')')
+    plt.autoscale(enable=False)
     plt.subplot(132)
-    new_in_out.show_jpg_sub(data2, if_color, 'nearest neighbor method (' + str(data2.shape[1]) + 'x' + str(data2.shape[0]) + ')', font_size)
+    new_in_out.show_jpg_sub(data2, 'nearest neighbor method (' + str(data2.shape[1]) + 'x' + str(data2.shape[0]) + ')')
+    plt.autoscale(enable=False)
     plt.subplot(133)
-    new_in_out.show_jpg_sub(data3, if_color, 'bilinear interpolation (' + str(data2.shape[1]) + 'x' + str(data2.shape[0]) + ')', font_size)
+    new_in_out.show_jpg_sub(data3, 'bilinear interpolation (' + str(data2.shape[1]) + 'x' + str(data2.shape[0]) + ')')
+    plt.autoscale(enable=False)
     plt.show()
 
 
 def main():
     # Экземпляры классов
     new_in_out = In_Out()
+    new_processing = Processing()
 
     # Некоторые значения
     file_name = 'grace'
     big_coef = 1.3
     small_coef = 0.7
-    xcr_file_name_1 = 'c12-85v'
+    xcr_file_name_1 = 'data/xcr/c12-85v.xcr'
     xcr_shape_1 = (1024, 1024)
-    xcr_file_name_2 = 'u0'
+    xcr_file_name_2 = 'data/xcr/u0.xcr'
     xcr_shape_2 = (2500, 2048)
     screen_height = 256
-    # screen_width = 1440
+    screen_width = 1440
 
     # Оригинальные данные
     img = new_in_out.read_jpg(file_name)
     xcr_data_1 = new_in_out.read_xcr(xcr_file_name_1, xcr_shape_1)
-    xcr_data_1_recount = np.rot90(new_in_out.recount_2d(xcr_data_1, 255))
+    xcr_data_1_recount = np.rot90(new_processing.recount_2d(xcr_data_1, 255))
     xcr_data_2 = new_in_out.read_xcr(xcr_file_name_2, xcr_shape_2)
-    xcr_data_2_recount = np.rot90(new_in_out.recount_2d(xcr_data_2, 255))
+    xcr_data_2_recount = np.rot90(new_processing.recount_2d(xcr_data_2, 255))
 
     # Увеличение grace методом ближайшего соседа
     bid_img_neighbor = new_in_out.reshape_nearest_neighbor(img, big_coef)
@@ -86,4 +91,4 @@ def main():
     subplots(img, bid_img_neighbor, bid_img_interpol, file_name, big_coef)
     subplots(img, small_img_neighbor, small_img_interpol, file_name, small_coef)
     subplots(xcr_data_1_recount, xcr_1_resize_neighbor, xcr_1_resize_interpol, xcr_file_name_1, xcr_coef_1)
-    subplots(xcr_data_2_recount, xcr_2_resize_neighbor, xcr_2_resize_interpol, xcr_file_name_2, xcr_coef_2, (60, 21), 60)
+    subplots(xcr_data_2_recount, xcr_2_resize_neighbor, xcr_2_resize_interpol, xcr_file_name_2, xcr_coef_2, (50, 16), 20)

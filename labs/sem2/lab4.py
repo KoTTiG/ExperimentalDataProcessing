@@ -17,85 +17,81 @@ def main():
     new_in_out.write_jpg(neg_grace, grace_file_name + '_negative')
 
     # xcr 1
-    xcr_1_file_name = 'c12-85v'
+    xcr_1_file_name = 'data/xcr/c12-85v.xcr'
     xcr_1_shape = (1024, 1024)
+
     xcr_1_data = new_in_out.read_xcr(xcr_1_file_name, xcr_1_shape)
-    xcr_1_data_recount = np.rot90(new_in_out.recount_2d(xcr_1_data, 255))
-    neg_xcr_1 = new_processing.negative(xcr_1_data_recount, 255)
+    xcr_1_data_recount = xcr_1_data
+    neg_xcr_1 = new_processing.negative(xcr_1_data, 255)
+
+
     new_in_out.write_jpg(neg_xcr_1, xcr_1_file_name + '_negative')
 
     # xcr 2
-    xcr_2_file_name = 'u0'
+    xcr_2_file_name = 'data/xcr/u0.xcr'
     xcr_2_shape = (2500, 2048)
     xcr_2_data = new_in_out.read_xcr(xcr_2_file_name, xcr_2_shape)
-    xcr_2_data_recount = np.rot90(new_in_out.recount_2d(xcr_2_data, 255))
-    neg_xcr_2 = new_processing.negative(xcr_2_data_recount, 255)
-    new_in_out.write_jpg(neg_xcr_2, xcr_2_file_name + '_negative')
+    xcr_2_data_recount = xcr_2_data
+    neg_xcr_2 = new_processing.negative(xcr_2_data, 255)
 
     # Negative plots
-    plt.figure(figsize=(20, 24))
-    plt.suptitle("Negative", fontsize=80)
     plt.subplot(321)
-    new_in_out.show_jpg_sub(img_grace, grace_file_name + ' original', 40)
+    new_in_out.show_jpg_sub(img_grace, grace_file_name + ' original')
     plt.subplot(322)
-    new_in_out.show_jpg_sub(neg_grace, grace_file_name + ' negative', 40)
+    new_in_out.show_jpg_sub(neg_grace, grace_file_name + ' negative')
+
     plt.subplot(323)
-    new_in_out.show_jpg_sub(xcr_1_data_recount, xcr_1_file_name + ' original', 40)
+    new_in_out.show_jpg_sub(xcr_1_data_recount, xcr_1_file_name + ' original')
     plt.subplot(324)
-    new_in_out.show_jpg_sub(neg_xcr_1, xcr_1_file_name + ' negative', 40)
+    new_in_out.show_jpg_sub(neg_xcr_1, xcr_1_file_name + ' negative')
     plt.subplot(325)
-    new_in_out.show_jpg_sub(xcr_2_data_recount, xcr_2_file_name + ' original', 40)
+    new_in_out.show_jpg_sub(xcr_2_data_recount, xcr_2_file_name + ' original')
     plt.subplot(326)
-    new_in_out.show_jpg_sub(neg_xcr_2, xcr_2_file_name + ' negative', 40)
+    new_in_out.show_jpg_sub(neg_xcr_2, xcr_2_file_name + ' negative')
+
     plt.show()
 
     # img1
     img_name = 'img1'
     c_gamma = 2
-    gamma = 0.67
+    gamma = 1.10
     c_log = 30
     img_data = new_in_out.read_jpg(img_name)
-    # img_log = new_processing.log_transform(img_data, c_log)
+
     img_gamma = new_processing.gamma_transform(img_data, c_gamma, gamma)
     img_log = new_processing.log_transform(img_data, c_log)
     # save to files
     new_in_out.write_jpg(img_gamma, img_name + '_gamma')
     new_in_out.write_jpg(img_log, img_name + '_log')
-    print(img_data)
-    print('----------------------------------------------')
-    print(img_gamma)
+
     # plot img
-    plt.figure(figsize=(16, 30))
-    plt.suptitle(img_name, fontsize=80)
-    plt.subplot(311)
-    new_in_out.show_jpg_sub(img_data, 'original', 40)
-    plt.subplot(312)
-    new_in_out.show_jpg_sub(new_in_out.read_jpg(img_name + '_gamma'), 'gamma transform, gamma=' + str(gamma) + ', C=' + str(c_gamma), 40)
-    plt.subplot(313)
-    new_in_out.show_jpg_sub(new_in_out.read_jpg(img_name + '_log'), 'log transform, C=' + str(c_log), 40)
+    plt.subplot(221)
+    new_in_out.show_jpg_sub(new_in_out.read_jpg(img_name), 'original')
+    plt.subplot(222)
+    new_in_out.show_jpg_sub(new_in_out.read_jpg(img_name + '_gamma'),
+                            'gamma transform, gamma=' + str(gamma) + ', C=' + str(c_gamma))
+    plt.subplot(223)
+    new_in_out.show_jpg_sub(new_in_out.read_jpg(img_name + '_log'), 'log transform, C=' + str(c_log))
     plt.show()
 
     # img2
     img_name = 'img2'
-    c_gamma = 5
-    gamma = 0.67
-    c_log = 20
     img_data = new_in_out.read_jpg(img_name)
-    img_log = new_processing.log_transform(img_data, c_log)
+
     img_gamma = new_processing.gamma_transform(img_data, c_gamma, gamma)
-    img_log = new_processing.log_transform(img_gamma, c_log)
-    # # save to files
-    # new_in_out.write_jpg(img_gamma, img_name + '_gamma')
-    # new_in_out.write_jpg(img_log, img_name + '_log')
+    img_log = new_processing.log_transform(img_data, c_log)
+    # save to files
+    new_in_out.write_jpg(img_gamma, img_name + '_gamma')
+    new_in_out.write_jpg(img_log, img_name + '_log')
+
     # plot img
-    plt.figure(figsize=(16, 30))
-    plt.suptitle(img_name, fontsize=80)
-    plt.subplot(311)
-    new_in_out.show_jpg_sub(img_data, 'original', 40)
-    plt.subplot(312)
-    new_in_out.show_jpg_sub(img_gamma, 'gamma transform, gamma=' + str(gamma) + ', C=' + str(c_gamma), 40)
-    plt.subplot(313)
-    new_in_out.show_jpg_sub(img_log, 'log transform, C=' + str(c_log), 40)
+    plt.subplot(221)
+    new_in_out.show_jpg_sub(new_in_out.read_jpg(img_name), 'original')
+    plt.subplot(222)
+    new_in_out.show_jpg_sub(new_in_out.read_jpg(img_name + '_gamma'),
+                            'gamma transform, gamma=' + str(gamma) + ', C=' + str(c_gamma))
+    plt.subplot(223)
+    new_in_out.show_jpg_sub(new_in_out.read_jpg(img_name + '_log'), 'log transform, C=' + str(c_log))
     plt.show()
 
     # img3
@@ -104,21 +100,21 @@ def main():
     gamma = 0.67
     c_log = 20
     img_data = new_in_out.read_jpg(img_name)
-    img_log = new_processing.log_transform(img_data, c_log)
+
     img_gamma = new_processing.gamma_transform(img_data, c_gamma, gamma)
-    img_log = new_processing.log_transform(img_gamma, c_log)
-    # # save to files
-    # new_in_out.write_jpg(img_gamma, img_name + '_gamma')
-    # new_in_out.write_jpg(img_log, img_name + '_log')
+    img_log = new_processing.log_transform(img_data, c_log)
+    # save to files
+    new_in_out.write_jpg(img_gamma, img_name + '_gamma')
+    new_in_out.write_jpg(img_log, img_name + '_log')
+
     # plot img
-    plt.figure(figsize=(38, 13))
-    plt.suptitle(img_name, fontsize=80)
-    plt.subplot(131)
-    new_in_out.show_jpg_sub(img_data, 'original', 40)
-    plt.subplot(132)
-    new_in_out.show_jpg_sub(img_gamma, 'gamma transform, gamma=' + str(gamma) + ', C=' + str(c_gamma), 40)
-    plt.subplot(133)
-    new_in_out.show_jpg_sub(img_log, 'log transform, C=' + str(c_log), 40)
+    plt.subplot(221)
+    new_in_out.show_jpg_sub(new_in_out.read_jpg(img_name), 'original')
+    plt.subplot(222)
+    new_in_out.show_jpg_sub(new_in_out.read_jpg(img_name + '_gamma'),
+                            'gamma transform, gamma=' + str(gamma) + ', C=' + str(c_gamma))
+    plt.subplot(223)
+    new_in_out.show_jpg_sub(new_in_out.read_jpg(img_name + '_log'), 'log transform, C=' + str(c_log))
     plt.show()
 
     # img4
@@ -127,20 +123,42 @@ def main():
     gamma = 0.4
     c_log = 5
     img_data = new_in_out.read_jpg(img_name)
-    img_log = new_processing.log_transform(img_data, c_log)
+
     img_gamma = new_processing.gamma_transform(img_data, c_gamma, gamma)
-    img_log = new_processing.log_transform(img_gamma, c_log)
-    # # save to files
-    # new_in_out.write_jpg(img_gamma, img_name + '_gamma')
-    # new_in_out.write_jpg(img_log, img_name + '_log')
+    img_log = new_processing.log_transform(img_data, c_log)
+    # save to files
+    new_in_out.write_jpg(img_gamma, img_name + '_gamma')
+    new_in_out.write_jpg(img_log, img_name + '_log')
+
     # plot img
-    plt.figure(figsize=(23, 7))
-    font_size = 25
-    plt.suptitle(img_name, fontsize=50)
-    plt.subplot(131)
-    new_in_out.show_jpg_sub(img_data, 'original', font_size)
-    plt.subplot(132)
-    new_in_out.show_jpg_sub(img_gamma, 'gamma transform, gamma=' + str(gamma) + ', C=' + str(c_gamma), font_size)
-    plt.subplot(133)
-    new_in_out.show_jpg_sub(img_log, 'log transform, C=' + str(c_log), font_size)
+    plt.subplot(221)
+    new_in_out.show_jpg_sub(new_in_out.read_jpg(img_name), 'original')
+    plt.subplot(222)
+    new_in_out.show_jpg_sub(new_in_out.read_jpg(img_name + '_gamma'),
+                            'gamma transform, gamma=' + str(gamma) + ', C=' + str(c_gamma))
+    plt.subplot(223)
+    new_in_out.show_jpg_sub(new_in_out.read_jpg(img_name + '_log'), 'log transform, C=' + str(c_log))
+    plt.show()
+
+    # img4
+    img_name = 'HollywoodLC'
+    c_gamma = 3
+    gamma = 0.7
+    c_log = 6
+    img_data = new_in_out.read_jpg(img_name)
+
+    img_gamma = new_processing.gamma_transform(img_data, c_gamma, gamma)
+    img_log = new_processing.log_transform(img_data, c_log)
+    # save to files
+    new_in_out.write_jpg(img_gamma, img_name + '_gamma')
+    new_in_out.write_jpg(img_log, img_name + '_log')
+
+    # plot img
+    plt.subplot(221)
+    new_in_out.show_jpg_sub(new_in_out.read_jpg(img_name), 'original')
+    plt.subplot(222)
+    new_in_out.show_jpg_sub(new_in_out.read_jpg(img_name + '_gamma'),
+                            'gamma transform, gamma=' + str(gamma) + ', C=' + str(c_gamma))
+    plt.subplot(223)
+    new_in_out.show_jpg_sub(new_in_out.read_jpg(img_name + '_log'), 'log transform, C=' + str(c_log))
     plt.show()

@@ -1,6 +1,7 @@
 import math
 import numpy as np
 
+
 class Processing:
     def antishift(self, inData, N):
         out_data = inData
@@ -140,4 +141,27 @@ class Processing:
         for i in range(new_arr.shape[0]):
             for j in range(new_arr.shape[1]):
                 new_arr[i, j] = (new_arr[i, j] - min) * s / (max - min)
-        return new_arr
+        return new_arr.astype(int)
+
+    def negative(self, img, max_color):
+        new_img = np.copy(img)
+
+        new_img = (max_color - new_img)
+
+        return new_img
+
+    def log_transform(self, img, c_log):
+        new_img = np.copy(img)
+
+        new_img = np.log(new_img)
+        new_img = np.multiply(new_img, c_log)
+
+        return new_img
+
+    def gamma_transform(self, img, c_gamma, gamma):
+        new_img = np.copy(img)
+
+        new_img = np.power(new_img, gamma)
+        new_img = np.multiply(new_img, c_gamma)
+
+        return new_img
